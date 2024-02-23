@@ -1,12 +1,26 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from .utils import generate_multiple_qr_codes, combine_qr_codes
 import os
 # Create your views here.
 def Home(request):
     return render(
         request,
-        "index.html"
+        "home.html"
     )
+
+
+def signup_client(request):
+    return render(request, HttpResponse("Signup for clinet"))
+
+def login_client(request):
+    return render(request, HttpResponse("login for client"))
+
+def signup_customer(request):
+    return render(request, HttpResponse("Sign up for customer"))
+
+def login_customer(request):
+    return render(request, HttpResponse("login for customer"))
+
 
 def counter(request):
     if request.method == "POST":
