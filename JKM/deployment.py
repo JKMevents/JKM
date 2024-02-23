@@ -3,10 +3,12 @@ from .settings import *
 from .settings import BASE_DIR
 
 ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME'], 
-                 'webapp.jkmevents.in']
+                 'webapp.jkmevents.in',
+                 "www.jkmevents.in"]
 
 CSRF_TRUSTED_ORIGINS = ["https://"+ os.environ['WEBSITE_HOSTNAME'], 
-                        'webapp.jkmevents.in']
+                        'webapp.jkmevents.in',
+                        "www.jkmevents.in"]
 
 DEBUG = True
 
