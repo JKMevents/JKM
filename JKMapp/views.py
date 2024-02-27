@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from .utils import generate_multiple_qr_codes, combine_qr_codes
 import os
 from django.views.decorators.csrf import csrf_protect
