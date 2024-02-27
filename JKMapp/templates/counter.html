@@ -12,9 +12,8 @@
     <div class="calculator">
         <div class="row">
         <form action="{% url 'counter' %}" method="post">
-          {% csrf_token csrf_token %}
+          {% csrf_token  %}
         <input type="text" id="display" value="0" name="display" readonly />
-      
         <button type="submit" class="button">Make</button>
       </div>
     </form>

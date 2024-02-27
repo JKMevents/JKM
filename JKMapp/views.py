@@ -1,6 +1,9 @@
 from django.shortcuts import render, HttpResponse
 from .utils import generate_multiple_qr_codes, combine_qr_codes
 import os
+from django.views.decorators.csrf import csrf_protect
+
+
 # Create your views here.
 def Home(request):
     return render(
@@ -22,8 +25,9 @@ def login_customer(request):
     return render(request, HttpResponse("login for customer"))
 
 
-from django.shortcuts import render, redirect
 
+
+@csrf_protect
 def counter(request):
     if request.method == "POST":
         num = request.POST.get('display')
