@@ -22,25 +22,28 @@ def login_customer(request):
     return render(request, HttpResponse("login for customer"))
 
 
+from django.shortcuts import render, redirect
+
 def counter(request):
     if request.method == "POST":
         num = request.POST.get('display')
-        if int(num )==0:
-            return render(request, "counter.html")
-        qrcodes = []
+        if int(num) == 0:
+            # Include the CSRF token when rendering the template
+            return render(request, "counter.html", {'csrf_token': request.POST.get('csrfmiddlewaretoken')})
         qrcodes = generate_multiple_qr_codes(int(num))
         margin = 10
-        tickets =  combine_qr_codes(qrcodes, margin)
+        tickets = combine_qr_codes(qrcodes, margin)
         dir = "JKMapp/static/qrcode/"
         os.makedirs(dir, exist_ok=True)
-        tickets.save(dir + "tickets.png")
+        tickets.save(os.path.join(dir, "tickets.png"))
         print('code is working')
+        # Redirect to the same view after processing the form submission
+        return redirect('counter')
+
+    return render(request, "counter.html")
 
 
-    return render(
-        request,
-        "counter.html"
-    )
+
 
 def test(request):
     if request.method == "POST":
