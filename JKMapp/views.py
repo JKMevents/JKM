@@ -42,7 +42,8 @@ def counter(request):
         tickets.save(os.path.join(dir, "tickets.png"))
         
         # Redirect to the same view after processing the form submission
-        font_path = "JKMapp\static\KodeMono-Regular.ttf"
+        font_path = "JKMapp/static/KodeMono-Regular.ttf"
+
         font_size = 50
         color = (255, 0, 0)
 
@@ -62,7 +63,8 @@ def counter(request):
             (f"{ticket_number}", (1550, 470))
         ]
         num = int(num)
-        ticket_template_dir = "JKMapp\static\Ticket.png"
+        
+        ticket_template_dir = "JKMapp/static/Ticket.png"        
         ticket_template = Image.open(ticket_template_dir)
         canvas = create_canvas(num, ticket_template, margin =10)
         qr_codes = generate_qr_codes(num, data_prefix="JKM2024")
