@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .utils import generate_multiple_qr_codes, combine_qr_codes, create_canvas, generate_qr_codes, put_tickets, putqr, add_text_to_image
+from .utils import generate_multiple_qr_codes, combine_qr_codes, create_canvas, generate_qr_codes, put_tickets, putqr, add_text_to_image, create_tickets
 import os
 from django.views.decorators.csrf import csrf_protect
 from PIL import Image
@@ -34,37 +34,20 @@ def counter(request):
         if int(num) == 0:
             # Include the CSRF token when rendering the template
             return render(request, "counter.html", {'csrf_token': request.POST.get('csrfmiddlewaretoken')})
-        qrcodes = generate_multiple_qr_codes(int(num))
         margin = 10
-        tickets = combine_qr_codes(qrcodes, margin)
         dir = "JKMapp/static/qrcode/"
         os.makedirs(dir, exist_ok=True)
-        tickets.save(os.path.join(dir, "tickets.png"))
         
         # Redirect to the same view after processing the form submission
         font_path = "JKMapp/static/KodeMono-Regular.ttf"
 
-        font_size = 50
-        color = (255, 0, 0)
 
-        # Get current date and time
-        current_datetime = datetime.datetime.now()
-
-        # Format the datetime object as a string
-        formatted_date = current_datetime.strftime("%d-%m-%Y")
-        formatted_time = current_datetime.strftime("%H:%M:%S")
-        ticket_number = "www.JKMevents.in"
-
-        # Define text and positions
-        text_info = [
-            (f"{formatted_date}", (200, 350)),
-            (f"{formatted_time}", (700, 470)),
-            ("Rs.100", (1250, 470)),
-            (f"{ticket_number}", (1550, 470))
-        ]
         num = int(num)
-        
-        ticket_template_dir = "JKMapp/static/Ticket.png"        
+
+        ticket_template_dir = "JKMapp/static/Ticket.png" 
+        ticket_template = Image.open(ticket_template_dir)       
+        canvas = create_tickets(num, ticket_template, margin =10, data_prefix="JKM2024",font_path=font_path)
+        """
         ticket_template = Image.open(ticket_template_dir)
         canvas = create_canvas(num, ticket_template, margin =10)
         qr_codes = generate_qr_codes(num, data_prefix="JKM2024")
@@ -74,6 +57,9 @@ def counter(request):
         dir = "JKMapp/static/qrcode/"
         os.makedirs(dir, exist_ok=True)
         ticket_result.save(os.path.join(dir, "tickets.png"))
+        """
+        os.makedirs(dir, exist_ok=True)
+        canvas.save(os.path.join(dir, "tickets.png"))
         return redirect('counter')
 
     return render(request, "counter.html")

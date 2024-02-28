@@ -112,3 +112,61 @@ def add_text_to_image(canvas, number, ticket_template, text_info, font_path, fon
 
 
 
+def create_tickets(number, ticket_template, margin =10, data_prefix="JKM2024", font_path = "JKMapp/static/KodeMono-Regular.ttf"):
+    ticket_width, ticket_height = ticket_template.size
+    total_width = ticket_width
+    total_height = (number * ticket_height) +  margin
+    canvas = Image.new('RGB', (total_width, total_height), color='white')
+    y_offset = 0
+    # Redirect to the same view after processing the form submission
+    
+
+    font_size = 50
+    color = (255, 0, 0)
+
+        # Get current date and time
+    current_datetime = datetime.datetime.now()
+
+        # Format the datetime object as a string
+    formatted_date = current_datetime.strftime("%d-%m-%Y")
+    formatted_time = current_datetime.strftime("%H:%M:%S")
+    ticket_number = "www.JKMevents.in"
+
+        # Define text and positions
+    text_info = [
+            (f"{formatted_date}", (200, 350)),
+            (f"{formatted_time}", (700, 470)),
+            ("Rs.100", (1250, 470)),
+            (f"{ticket_number}", (1500, 470))
+        ]
+
+    draw = ImageDraw.Draw(canvas)
+
+    # Create a font object.
+    font = ImageFont.truetype(font_path, size=font_size)
+
+    for i in range(1, number+1):
+        canvas.paste(ticket_template, (0, y_offset))
+
+        qr = qrcode.QRCode(
+            version=1,
+            box_size=10,
+            border=4,
+            )
+        qr_data = f'{data_prefix}_{i}'
+        qr.add_data(qr_data)
+        qr.make(fit=True)
+        qr_img = qr.make_image(fill_color="black", back_color="white")
+        qr_width, qr_height = qr_img.size
+        qr_x_offset = ticket_width - qr_width - margin
+        qr_y_offset = y_offset + (ticket_height - qr_height) // 2
+        canvas.paste(qr_img, (qr_x_offset, qr_y_offset))
+
+        for text, position in text_info:
+            draw.text((position[0], position[1] + (ticket_height+margin)*(i-1) ), text, fill=color, font=font)
+
+
+        y_offset += ticket_height + margin
+
+    return canvas
+
