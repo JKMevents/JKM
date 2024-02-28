@@ -1,5 +1,5 @@
 import qrcode
-from PIL import Image
+
 # genrate qr code function 
 from PIL import Image, ImageDraw, ImageFont
 import datetime
@@ -39,7 +39,8 @@ def create_canvas(number, ticket_template, margin =10):
 
     # Calculate total dimensions for combined image
     total_width = ticket_width
-    total_height = (number * ticket_height) +  margin
+
+    total_height = (int(number) * ticket_height) +  margin
 
     # Create a new image with dimensions for combined tickets
     ticket_canvas = Image.new('RGB', (total_width, total_height), color='white')
@@ -99,7 +100,7 @@ def add_text_to_image(canvas, number, ticket_template, text_info, font_path, fon
     # Draw the text on the new image.
     for a in range(number):
         for text, position in text_info:
-            draw.text((position[0], position[1] + (ticket_height+margin)*a ), text, fill=color, font=font)
+            draw.text((position[0], position[1] + ((ticket_height)+margin)*a ), text, fill=color, font=font)
             
             # Adjust y_offset for next text line
 
