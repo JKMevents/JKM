@@ -126,10 +126,10 @@ def create_tickets(number, ticket_template, margin =10, data_prefix="JKM2024", f
 
 
     # Populate text information
-    text_info.append((f"{formatted_date}", (200, 350)))
-    text_info.append((f"{formatted_time}", (700, 470)))
-    text_info.append(("Rs.100", (1250, 470)))
-    text_info.append((f"{ticket_number}", (1500, 470)))
+    text_info.append((f"{formatted_date}", (250, 800)))
+    text_info.append((f"{formatted_time}", (250, 880)))
+    text_info.append(("Rs.100", (250, 970)))
+    text_info.append((f"{ticket_number}", (250, 1050)))
 
 
     # 2. Make a copy of the ticket template
@@ -145,7 +145,7 @@ def create_tickets(number, ticket_template, margin =10, data_prefix="JKM2024", f
     # 4. Create the canvas
     ticket_width, ticket_height = ticket_template_copy.size
     total_width = ticket_width
-    total_height = (number * ticket_height) + margin
+    total_height = number * (ticket_height + margin)
     canvas = Image.new('RGB', (total_width, total_height), color='white')
     
     
@@ -154,7 +154,7 @@ def create_tickets(number, ticket_template, margin =10, data_prefix="JKM2024", f
     for i in range(1, number + 1):
         qr = qrcode.QRCode(
             version=1,
-            box_size=10,
+            box_size=15,
             border=4,
             )
         qr_data = f'{data_prefix}_{i}'
@@ -164,10 +164,9 @@ def create_tickets(number, ticket_template, margin =10, data_prefix="JKM2024", f
 
         # 6. Paste the QR code onto the ticket template copy    
         qr_width, qr_height = qr_img.size
-        qr_x_offset = ticket_width - qr_width - margin
-        qr_y_offset = y_offset + (ticket_height - qr_height) // 2
+        qr_x_offset = ticket_width//2 - qr_width//2
+        qr_y_offset = y_offset + int(ticket_height*2/3)
         ticket_template_copy.paste(qr_img, (qr_x_offset, qr_y_offset))
-
         # 7. Paste the ticket template copy onto the canvas
         canvas.paste(ticket_template_copy, (0, (ticket_height + margin) * (i - 1)))
 
