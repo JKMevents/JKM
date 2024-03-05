@@ -8,7 +8,7 @@
     <title>Document</title>
 </head>
 <body>
-
+  <main>
     <div class="calculator">
         <div class="row">
         <form action="{% url 'counter' %}" method="post">
@@ -44,6 +44,7 @@
       </div>
     </div>
 
+    <h1>Total Tickets Generated: {{ total_tickets }}</h1>
 
 
   </main>

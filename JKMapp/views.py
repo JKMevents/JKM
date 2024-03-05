@@ -4,6 +4,10 @@ import os
 from django.views.decorators.csrf import csrf_protect
 from PIL import Image
 import datetime
+from .models import TicketInformation
+from django.db.models import Sum
+
+
 # Create your views here.
 def Home(request):
     return render(
@@ -48,9 +52,34 @@ def counter(request):
 
         os.makedirs(dir, exist_ok=True)
         canvas.save(os.path.join(dir, "tickets.png"))
+        
+
+        # get the latest iteration number from the databse
+        latest_iteration = TicketInformation.objects.latest('id').iteration if TicketInformation.objects.exists() else 0
+
+        # SAVE ticket information to the database
+        current_datetime = datetime.datetime.utcnow() + datetime.timedelta(hours=5, minutes=30)
+        ticket_info = TicketInformation.objects.create(
+            iteration = latest_iteration +1, 
+            ticket_count = num,
+            date = current_datetime.date(),
+            time = current_datetime.time()
+        )
+        ticket_info.save()
+        
         return redirect('counter')
 
-    return render(request, "counter.html")
+
+    total_tickets = TicketInformation.objects.aggregate(Sum('ticket_count'))['ticket_count__sum']
+
+    # Pass the total_tickets to the context
+    context = {
+        'total_tickets': total_tickets,
+        #'csrf_token': request.POST.get('csrfmiddlewaretoken')
+    }
+
+
+    return render(request, "counter.html", context)
 
 
 
