@@ -74,7 +74,7 @@ def counter(request):
 
     # Pass the total_tickets to the context
     context = {
-        'total_tickets': total_tickets,
+        'total_tickets': 0,
         #'csrf_token': request.POST.get('csrfmiddlewaretoken')
     }
 
