@@ -4,6 +4,7 @@ import qrcode
 from PIL import Image, ImageDraw, ImageFont
 import datetime
 import os
+from openpyxl import Workbook, load_workbook
 
 def generate_multiple_qr_codes(num_qr):
     qr_codes = []
@@ -172,3 +173,48 @@ def create_tickets(number, ticket_template, margin =10, data_prefix="JKM2024", f
 
      # 8. Return the canvas
     return canvas
+
+
+
+
+
+def read_counters():
+    try:
+        workbook = load_workbook('counter_info.xlsx')
+        sheet = workbook.active
+        total_count = sheet.cell(row=1, column=1).value
+        ticket_count = sheet.cell(row=1, column=2).value
+        if total_count is None:
+            total_count = 0
+        if ticket_count is None:
+            ticket_count = 0
+        return total_count, ticket_count
+    except FileNotFoundError:
+        # If the file doesn't exist, initialize counters to zero
+        total_count = 0
+        ticket_count = 0
+        return total_count, ticket_count
+    
+    
+# Function to update and save the counter values to the Excel file
+def update_counters(total_count, ticket_count):
+    try:
+        workbook = Workbook()
+        sheet = workbook.active
+        workbook = load_workbook('JKMapp/static/counter_info.xlsx')
+        sheet = workbook.active
+    except FileNotFoundError:
+        workbook = Workbook()
+        sheet = workbook.active
+    row = sheet.max_row + 1
+    current_datetime = datetime.datetime.utcnow() + datetime.timedelta(hours=5, minutes=30)
+    formatted_date = current_datetime.strftime("%d-%m-%Y")
+    formatted_time = current_datetime.strftime("%H:%M:%S")
+    sheet.cell(row=row, column=1).value = total_count
+    sheet.cell(row=row, column=2).value = ticket_count
+    sheet.cell(row=row, column=3).value = formatted_date
+    sheet.cell(row=row, column=4).value = formatted_time
+    workbook.save('JKMapp/static/counter_info.xlsx')
+
+
+

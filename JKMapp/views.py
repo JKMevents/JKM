@@ -1,10 +1,9 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .utils import create_tickets
+from .utils import create_tickets, read_counters, update_counters
 import os
 from django.views.decorators.csrf import csrf_protect
 from PIL import Image
 import datetime
-
 from django.db.models import Sum
 
 
@@ -53,9 +52,16 @@ def counter(request):
         os.makedirs(dir, exist_ok=True)
         canvas.save(os.path.join(dir, "tickets.png"))
         
+        # Update counter information
+        total_count, ticket_count = read_counters()
+        total_count += 1
+        ticket_count += num
+        update_counters(total_count, ticket_count)
 
         
         return redirect('counter')
+
+    total_count, ticket_count = read_counters()
 
 
     return render(request, "counter.html",)
