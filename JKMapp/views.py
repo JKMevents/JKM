@@ -28,43 +28,41 @@ def login_customer(request):
     return render(request, HttpResponse("login for customer"))
 
 
+COUNTERS_FILE_PATH = 'JKMapp/static/counter_info.xlsx'
+QR_CODE_DIR = 'JKMapp/static/qrcode/'
+FONT_PATH = 'JKMapp/static/KodeMono-Regular.ttf'
+TICKET_TEMPLATE_DIR = 'JKMapp/static/Ticket_template.png'
 
 
 @csrf_protect
 def counter(request):
+    total_count = read_counters()
     if request.method == "POST":
         num = request.POST.get('display')
-        if int(num) == 0:
+        num = int(num)
+        if num == 0:
             # Include the CSRF token when rendering the template
             return render(request, "counter.html", {'csrf_token': request.POST.get('csrfmiddlewaretoken')})
-        margin = 10
-        dir = "JKMapp/static/qrcode/"
-        os.makedirs(dir, exist_ok=True)
         
-        # Redirect to the same view after processing the form submission
-        font_path = "JKMapp/static/KodeMono-Regular.ttf"
-        num = int(num)
-
-        ticket_template_dir = "JKMapp/static/Ticket_template.png" 
-        ticket_template = Image.open(ticket_template_dir)       
-        canvas = create_tickets(num, ticket_template, margin =10, data_prefix="JKM2024",font_path=font_path)
-
-        os.makedirs(dir, exist_ok=True)
-        canvas.save(os.path.join(dir, "tickets.png"))
+        margin = 10
+        os.makedirs(QR_CODE_DIR, exist_ok=True)
+        
+        ticket_template = Image.open(TICKET_TEMPLATE_DIR)       
+        canvas = create_tickets(num, ticket_template, margin =10, data_prefix="JKM2024",font_path=FONT_PATH)
+        
+        canvas.save(os.path.join(QR_CODE_DIR, "tickets.png"))
         
         # Update counter information
-        total_count, ticket_count = read_counters()
+        
         total_count += 1
+        ticket_count=0
         ticket_count += num
         update_counters(total_count, ticket_count)
 
-        
         return redirect('counter')
 
-    total_count, ticket_count = read_counters()
-
-
-    return render(request, "counter.html",)
+    info = {"total_tickets": total_count}
+    return render(request, "counter.html", info)
 
 
 
