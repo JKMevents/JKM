@@ -67,4 +67,3 @@ ENV/
 env.bak/
 venv.bak/
 
-.JKMapp/static/counter_info.xlsx
