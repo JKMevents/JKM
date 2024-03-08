@@ -54,6 +54,39 @@
     <script src="{% static 'js/script.js' %}"></script>
 
     <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Add event listener for key presses
+        document.addEventListener("keypress", function (event) {
+            var keyPressed = event.key;
+            var displayValue = document.getElementById("display").value;
+            
+            // Handle number keys
+            if (!isNaN(keyPressed) && keyPressed !== " ") {
+                appendToDisplay(keyPressed);
+            } 
+            // Handle addition key
+            else if (keyPressed === "+") {
+                // Trigger click event on the 'Make' button
+                document.querySelector(".button").click();
+            } 
+            // Handle enter key
+            else if (event.keyCode === 13) {
+                // Trigger click event on the 'Print' button
+                document.querySelectorAll(".button")[2].click();
+            } 
+            // Handle subtraction key
+            else if (keyPressed === "-") {
+                // Trigger click event on the 'Clear' button
+                document.querySelectorAll(".button")[1].click();
+            }
+        });
+    });
+    
+    
+
+
+
+
       function appendToDisplay(value) {
         document.getElementById("display").value = value;
       }
@@ -62,7 +95,6 @@
         document.getElementById("display").value = "0";
       }
 
-      function calculate() {}
     </script>
   </body>
 </html>
