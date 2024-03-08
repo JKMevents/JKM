@@ -30,7 +30,7 @@ def login_customer(request):
 
 COUNTERS_FILE_PATH = 'JKMapp/static/counter_info.xlsx'
 QR_CODE_DIR = 'JKMapp/static/qrcode/'
-FONT_PATH = 'JKMapp/static/KodeMono-Regular.ttf'
+FONT_PATH = 'JKMapp/static/Roboto-Medium.ttf'
 TICKET_TEMPLATE_DIR = 'JKMapp/static/Ticket_template.png'
 
 

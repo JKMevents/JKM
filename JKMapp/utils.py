@@ -119,7 +119,7 @@ def add_text_to_image(canvas, number, ticket_template, text_info, font_path, fon
 
 
 
-def create_tickets(number, ticket_template, margin =10, data_prefix="JKM2024", font_path = "JKMapp/static/KodeMono-Regular.ttf"):
+def create_tickets(number, ticket_template, margin =10, data_prefix="JKM2024", font_path = "JKMapp/static/Roboto-Medium.ttf"):
     # 1. Define prerequisites and variables
     #font_path = "KodeMono-Regular.ttf"
     font_size = 50
@@ -130,7 +130,7 @@ def create_tickets(number, ticket_template, margin =10, data_prefix="JKM2024", f
     current_datetime = datetime.datetime.utcnow() + datetime.timedelta(hours=5, minutes=30)
     formatted_date = current_datetime.strftime("%d-%m-%Y")
     formatted_time = current_datetime.strftime("%H:%M:%S")
-    ticket_number = "www.JKMevents.in"
+    ticket_number = "Gurugram"
 
 
     # Populate text information
