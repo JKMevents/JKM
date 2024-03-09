@@ -122,7 +122,7 @@ def add_text_to_image(canvas, number, ticket_template, text_info, font_path, fon
 def create_tickets(number, ticket_template, margin =10, data_prefix="JKM2024", font_path = "JKMapp/static/Roboto-Medium.ttf"):
     # 1. Define prerequisites and variables
     #font_path = "KodeMono-Regular.ttf"
-    font_size = 50
+    font_size = 60
     color = (255, 0, 0)
     text_info = []
 
@@ -132,13 +132,17 @@ def create_tickets(number, ticket_template, margin =10, data_prefix="JKM2024", f
     formatted_time = current_datetime.strftime("%H:%M:%S")
     ticket_number = "Gurugram"
 
-
+    """
     # Populate text information
     text_info.append((f"{formatted_date}", (250, 800)))
     text_info.append((f"{formatted_time}", (250, 880)))
     text_info.append(("Rs.100", (250, 970)))
     text_info.append((f"{ticket_number}", (250, 1050)))
-
+    """
+    text_info.append((f"{formatted_date}", (410, 550)))
+    text_info.append((f"{formatted_time}", (410, 620)))
+    text_info.append(("Rs.100", (410, 690)))
+    text_info.append((f"{ticket_number}", (410, 760)))
 
     # 2. Make a copy of the ticket template
     ticket_template_copy = ticket_template.copy()
@@ -172,8 +176,8 @@ def create_tickets(number, ticket_template, margin =10, data_prefix="JKM2024", f
 
         # 6. Paste the QR code onto the ticket template copy    
         qr_width, qr_height = qr_img.size
-        qr_x_offset = ticket_width//2 - qr_width//2
-        qr_y_offset = y_offset + int(ticket_height*2/3)
+        qr_x_offset = ticket_width//2 #- qr_width//2
+        qr_y_offset = y_offset # + int(ticket_height*2/3)
         ticket_template_copy.paste(qr_img, (qr_x_offset, qr_y_offset))
         # 7. Paste the ticket template copy onto the canvas
         canvas.paste(ticket_template_copy, (0, (ticket_height + margin) * (i - 1)))

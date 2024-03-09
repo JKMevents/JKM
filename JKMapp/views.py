@@ -31,7 +31,7 @@ def login_customer(request):
 COUNTERS_FILE_PATH = 'JKMapp/static/counter_info.xlsx'
 QR_CODE_DIR = 'JKMapp/static/qrcode/'
 FONT_PATH = 'JKMapp/static/Roboto-Medium.ttf'
-TICKET_TEMPLATE_DIR = 'JKMapp/static/Ticket_template.png'
+TICKET_TEMPLATE_DIR = 'JKMapp/static/ticket_template_2.png'
 
 
 @csrf_protect
@@ -44,11 +44,11 @@ def counter(request):
             # Include the CSRF token when rendering the template
             return render(request, "counter.html", {'csrf_token': request.POST.get('csrfmiddlewaretoken')})
         
-        margin = 10
+        margin = 20
         os.makedirs(QR_CODE_DIR, exist_ok=True)
         
         ticket_template = Image.open(TICKET_TEMPLATE_DIR)       
-        canvas = create_tickets(num, ticket_template, margin =10, data_prefix="JKM2024",font_path=FONT_PATH)
+        canvas = create_tickets(num, ticket_template, margin =margin, data_prefix="JKM2024",font_path=FONT_PATH)
         
         canvas.save(os.path.join(QR_CODE_DIR, "tickets.png"))
         
