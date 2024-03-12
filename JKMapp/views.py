@@ -34,6 +34,7 @@ FONT_PATH = 'JKMapp/static/Roboto-Medium.ttf'
 TICKET_TEMPLATE_DIR = 'JKMapp/static/ticket_template_2.png'
 
 
+
 @csrf_protect
 def counter(request):
     total_count = read_counters()
