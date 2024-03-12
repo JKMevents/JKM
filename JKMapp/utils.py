@@ -141,7 +141,7 @@ def create_tickets(number, ticket_template, margin =10, data_prefix="JKM2024", f
     """
     text_info.append((f"{formatted_date}", (410, 550)))
     text_info.append((f"{formatted_time}", (410, 620)))
-    text_info.append(("Rs.100", (410, 690)))
+    text_info.append(("Rs.150", (410, 690)))
     text_info.append((f"{ticket_number}", (410, 760)))
 
     # 2. Make a copy of the ticket template
