@@ -8,61 +8,19 @@
     <title>Document</title>
 </head>
 <body>
+  <div class="row">
+    <button class="button" onclick="clearDisplay()">Clear</button>
+    <button
+      class="button"
+      onclick="printJS('{% static 'counter_info.xlsx' %}', 'image')"
+    >
+      Print
+    </button>
 
-    <div class="calculator">
-        <div class="row">
-        <input type="text" id="display" value="0" name="display" readonly />
-      
-      </div>
-      <div class="row">
-        <button class="button" onclick="clearDisplay()">Clear</button>
-        <button
-          class="button"
-          onclick="print()"
-        >
-          Print
-        </button>
-      </div>
+  </div>
+  
+  <script src="{% static 'js/print.min.js' %}"></script>
+  <script src="{% static 'js/script.js' %}"></script>
 
-      <div class="row">
-        <button class="button" onclick="appendToDisplay('7')">7</button>
-        <button class="button" onclick="appendToDisplay('8')">8</button>
-        <button class="button" onclick="appendToDisplay('9')">9</button>
-      </div>
-      <div class="row">
-        <button class="button" onclick="appendToDisplay('4')">4</button>
-        <button class="button" onclick="appendToDisplay('5')">5</button>
-        <button class="button" onclick="appendToDisplay('6')">6</button>
-      </div>
-      <div class="row">
-        <button class="button" onclick="appendToDisplay('1')">1</button>
-        <button class="button" onclick="appendToDisplay('2')">2</button>
-        <button class="button" onclick="appendToDisplay('3')">3</button>
-      </div>
-    </div>
-
-
-
-  </main>
-
-
-    <script src="{% static 'js/print.min.js' %}"></script>
-    <script src="{% static 'js/script.js' %}"></script>
-
-    <script>
-      function appendToDisplay(value) {
-        document.getElementById("display").value = value;
-      }
-
-      function clearDisplay() {
-        document.getElementById("display").value = "0";
-      }
-
-      function print() {
-        var num = document.getElementById("display").value
-        var fileName = 'tickets' + num +'.png';
-        printJS('{% static "qrcode/" %}' + fileName, 'image');
-    }
-    </script>
   </body>
 </html>

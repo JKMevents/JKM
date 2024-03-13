@@ -69,14 +69,6 @@ def counter(request):
 
 
 def test(request):
-    if request.method == "POST":
-        num = request.POST.get('display')
-        if int(num) == 0:
-            # Include the CSRF token when rendering the template
-            return render(request, "test.html", {'csrf_token': request.POST.get('csrfmiddlewaretoken')})
-        dir = "JKMapp/static/qrcode/"
-        os.makedirs(dir, exist_ok=True)
-        return redirect('test')
 
 
     return render(
