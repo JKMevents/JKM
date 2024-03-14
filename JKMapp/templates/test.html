@@ -9,10 +9,15 @@
 </head>
 <body>
   <div class="row">
-    <button class="button" onclick="clearDisplay()">Clear</button>
+    <form method="post" action="{% url 'test' %}">
+      {% csrf_token %}
+      <button class="button" type="submit">Generate PDF</button>
+  </form>
+  
     <button
       class="button"
-      onclick="printJS('{% static 'counter_info.xlsx' %}', 'image')"
+      
+      onclick="printJS('{% static 'counter_info.pdf' %}', 'pdf')"
     >
       Print
     </button>

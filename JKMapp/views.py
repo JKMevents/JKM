@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .utils import create_tickets, read_counters, update_counters
+from .utils import create_tickets, read_counters, update_counters, generate_pdf_from_excel
 import os
 from django.views.decorators.csrf import csrf_protect
 from PIL import Image
@@ -32,7 +32,7 @@ COUNTERS_FILE_PATH = 'JKMapp/static/counter_info.xlsx'
 QR_CODE_DIR = 'JKMapp/static/qrcode/'
 FONT_PATH = 'JKMapp/static/Roboto-Medium.ttf'
 TICKET_TEMPLATE_DIR = 'JKMapp/static/ticket_template_2.png'
-
+COUNTERS_PDF_FILE_PATH = 'JKMapp/static/counter_info.pdf'
 
 
 @csrf_protect
@@ -68,10 +68,17 @@ def counter(request):
 
 
 
+@csrf_protect
 def test(request):
+        if request.method == 'POST':
+        # Get the path to the Excel file
+            input_excel = COUNTERS_FILE_PATH  # Replace with the actual path to your Excel file
 
-
-    return render(
+        # Generate a unique filename for the PDF
+            output_pdf = COUNTERS_PDF_FILE_PATH
+            generate_pdf_from_excel(input_excel, output_pdf)
+        return render(
         request,
         "test.html"
-    )
+        )
+

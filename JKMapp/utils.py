@@ -5,7 +5,10 @@ from PIL import Image, ImageDraw, ImageFont
 import datetime
 import os
 from openpyxl import Workbook, load_workbook
-
+from openpyxl import load_workbook
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+#import os
 
 import os.path
 
@@ -235,6 +238,39 @@ def update_counters(total_count, ticket_count):
         workbook.save(COUNTERS_FILE_PATH)
     except Exception as e:
         print(f"Error updating counters: {e}")
+
+
+
+
+def generate_pdf_from_excel(input_excel, output_pdf):
+    # Load the Excel file
+    wb = load_workbook(input_excel)
+    ws = wb.active
+
+    # Create a PDF
+    c = canvas.Canvas(output_pdf, pagesize=letter)
+    y = 700  # Initial y-coordinate for writing text
+
+    for row in ws.iter_rows():
+        x = 50  # Initial x-coordinate for writing text
+        for cell in row:
+            c.drawString(x, y, str(cell.value))
+            x += 100  # Move to the next column
+        y -= 12  # Move to the next row
+    c.save()
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
