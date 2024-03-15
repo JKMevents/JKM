@@ -82,3 +82,6 @@ def test(request):
         "test.html"
         )
 
+@csrf_protect
+def tickets(request):
+    return HttpResponse("hi")
