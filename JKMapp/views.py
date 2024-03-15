@@ -84,5 +84,8 @@ def test(request):
         )
 
 @csrf_protect
-def tickets(request):
-    return HttpResponse("hi")
+def cam(request):
+    return render(
+        request,
+        "cam.html"
+        )

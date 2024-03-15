@@ -175,7 +175,7 @@ def create_tickets(number, start_number, ticket_template, margin=10, data_prefix
 
         # Add ticket number to text information
         ticket_number = f"Ticket Number: {i}"
-        draw.text((410, 490), ticket_number, fill=color, font=font)
+        draw.text((210, 490), ticket_number, fill=color, font=font)
 
         # Paste the ticket template copy onto the canvas
         canvas.paste(ticket_template_copy, (0, (ticket_height + margin) * (i - start_number)))
