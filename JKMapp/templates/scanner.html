@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hotel_image</title>
+</head>
+<body>
+    <h1>Camera Image Upload</h1>
+    <div>
+        <video id="video" width="400" height="300" autoplay></video>
+        <canvas id="canvas" width="400" height="300" style="display: none;"></canvas>
+        <button id="switchCamera">Switch Camera</button>
+        <button id="uploadImage">Upload Image</button>
+        <button id="capture">Capture Image</button>
+    </div>
+    <form action="{% url 'scanner' %}" method="post" enctype="multipart/form-data" id="uploadForm">
+        {% csrf_token %}
+        <input type="file" name="image" id="image">
+        <button type="submit" style="display: none;" id="submitButton">Upload</button>
+    </form>
+
+    <script>
+        // Access the video and canvas elements
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+
+        // Access the "Capture" button
+        const captureButton = document.getElementById('capture');
+        const switchCameraButton = document.getElementById('switchCamera');
+        const uploadImageButton = document.getElementById('uploadImage');
+        const uploadForm = document.getElementById('uploadForm');
+        const imageInput = document.getElementById('image');
+        const submitButton = document.getElementById('submitButton');
+
+        // Function to capture image from the camera
+        captureButton.addEventListener('click', () => {
+            // Draw the current frame of the video onto the canvas
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            // Convert the canvas image to a data URL
+            const imageDataURL = canvas.toDataURL('image/jpeg');
+            // Set the data URL to the hidden input field
+            imageInput.value = imageDataURL;
+            // Show the submit button
+            submitButton.style.display = 'block';
+        });
+
+        // Function to switch camera
+        switchCameraButton.addEventListener('click', async () => {
+            // Stop the current stream
+            video.srcObject.getTracks().forEach(track => {
+                track.stop();
+            });
+
+            // Get available devices
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const videoDevices = devices.filter(device => device.kind === 'videoinput');
+
+            // Toggle between available devices
+            let currentDeviceIndex = videoDevices.findIndex(device => device.label === video.srcObject.getVideoTracks()[0].label);
+            const nextDeviceIndex = (currentDeviceIndex + 1) % videoDevices.length;
+
+            // Get the next device and start the stream
+            navigator.mediaDevices.getUserMedia({ video: { deviceId: videoDevices[nextDeviceIndex].deviceId } })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(err => {
+                    console.error('Error accessing camera:', err);
+                });
+        });
+
+        // Function to upload image
+        uploadImageButton.addEventListener('click', () => {
+            uploadForm.submit();
+        });
+
+        // Access the user's camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error('Error accessing camera:', err);
+            });
+    </script>
+</body>
+</html>

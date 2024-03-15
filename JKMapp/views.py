@@ -1,10 +1,19 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .utils import create_tickets, read_counters, update_counters, generate_pdf_from_excel
+from .utils import create_tickets, read_counters, update_counters, generate_pdf_from_excel, BarcodeReader, check_and_save_string
 import os
 from django.views.decorators.csrf import csrf_protect
 from PIL import Image
 import datetime
-from django.db.models import Sum
+
+
+
+
+from django.http import JsonResponse
+import base64
+from django.core.files.base import ContentFile
+
+
+
 
 
 # Create your views here.
@@ -84,8 +93,76 @@ def test(request):
         )
 
 @csrf_protect
-def cam(request):
+def upload_image(request):
+    if request.method == 'POST':
+        data = request.POST.get('image_data')
+        print('Received data:', data)  # Debugging statement
+
+        if data:
+            try:
+                format, imgstr = data.split(';base64,')
+                ext = format.split('/')[-1]
+
+                # Convert base64 data to a file object
+                img_data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+
+                # Process the image data as needed (e.g., save to disk, perform further processing)
+                # Replace this with your actual processing logic
+
+                print('Image uploaded successfully')  # Debugging statement
+                return JsonResponse({'message': 'Image uploaded successfully'})
+            except Exception as e:
+                print('Error processing image:', e)  # Debugging statement
+        else:
+            print('No image data received')  # Debugging statement
+    else:
+        print('Invalid request method')  # Debugging statement
+
+
+    
+    
     return render(
         request,
         "cam.html"
         )
+
+
+
+import cv2
+
+def scanner(request):
+    if request.method == 'POST' and request.FILES.get('image'):
+        image_file = request.FILES['image']
+        # Define the directory where you want to save the uploaded images
+        upload_dir = 'JKMapp/static/images/'
+        # Ensure the upload directory exists
+        if not os.path.exists(upload_dir):
+            os.makedirs(upload_dir)
+
+        # Construct the file path to save the uploaded image
+        file_path = os.path.join(upload_dir, image_file.name)
+
+        # Save the uploaded image to the file path
+        with open(file_path, 'wb') as destination:
+            for chunk in image_file.chunks():
+                destination.write(chunk)
+
+        barcodedata = BarcodeReader(file_path)
+
+        check_and_save_string(barcodedata, "JKMapp/static/paytm.csv")
+        #print(barcodedata)
+        
+        #return HttpResponse('Image uploaded successfully.')
+    else:
+        print("did not get any image")
+    return render(request, 'scanner.html')
+
+
+
+
+
+
+
+
+
+

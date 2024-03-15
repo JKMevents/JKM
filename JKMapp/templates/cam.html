@@ -42,24 +42,65 @@
         } else {
             console.error('getUserMedia is not supported in this browser');
         }
+// Capture function
 
-        // Capture function
-        captureButton.addEventListener('click', function() {
-            const context = canvas.getContext('2d');
 
-            // Draw the video frame on the canvas
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+// Capture function
+captureButton.addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the default action of the button
 
-            // Convert canvas to base64 data URL
-            const imageData = canvas.toDataURL('image/jpeg');
+    const context = canvas.getContext('2d');
 
-            // Optionally, you can send this data to your server for further processing
-            console.log('Captured image:', imageData);
-            
-            // You can hide the video element and show the captured image if needed
-            video.style.display = 'none';
-            canvas.style.display = 'block';
-        });
+    // Draw the video frame on the canvas
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Convert canvas to base64 data URL
+    const imageData = canvas.toDataURL('image/jpeg');
+
+    // Include the CSRF token in the request headers
+    const csrftoken = getCookie('csrftoken');
+
+    // Send the captured image data to Django backend via AJAX
+    fetch('/upload_image/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify({ image_data: imageData })
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Image uploaded successfully');
+        } else {
+            console.error('Failed to upload image');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+    
+    // You can hide the video element and show the captured image if needed
+    video.style.display = 'none';
+    canvas.style.display = 'block';
+});
+
+
+// Function to get CSRF token from cookies
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
         // Button to switch camera
         const switchCameraButton = document.createElement('button');
