@@ -38,6 +38,7 @@ COUNTERS_PDF_FILE_PATH = 'JKMapp/static/counter_info.pdf'
 @csrf_protect
 def counter(request):
     total_count = read_counters()
+    start_number = total_count
     if request.method == "POST":
         num = request.POST.get('display')
         num = int(num)
@@ -49,7 +50,7 @@ def counter(request):
         os.makedirs(QR_CODE_DIR, exist_ok=True)
         
         ticket_template = Image.open(TICKET_TEMPLATE_DIR)       
-        canvas = create_tickets(num, ticket_template, margin =margin, data_prefix="JKM2024",font_path=FONT_PATH)
+        canvas = create_tickets(num, start_number , ticket_template, margin =margin, data_prefix="JKM2024",font_path=FONT_PATH)
         
         canvas.save(os.path.join(QR_CODE_DIR, "tickets.png"))
         
