@@ -307,13 +307,13 @@ def check_and_save_string(input_string, file_path):
 
     # Check if input_string already exists
     if input_string.decode('utf-8') in existing_strings:
-        print("String is repeated")
+        return "String is repeated"
     else:
         # Save the string to the CSV file
         with open(file_path, 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([input_string.decode('utf-8')])
-        print("String saved successfully")
+        return "String saved successfully"
 
 # Example usage:
 #input_string = b'JKM2024_1'

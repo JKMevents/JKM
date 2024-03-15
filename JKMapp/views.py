@@ -126,9 +126,9 @@ def upload_image(request):
         "cam.html"
         )
 
-
-
-import cv2
+#mport os
+#from django.shortcuts import render, redirect
+#from .barcode_utils import BarcodeReader  # Assuming barcode reader function is in barcode_utils module
 
 def scanner(request):
     if request.method == 'POST' and request.FILES.get('image'):
@@ -147,15 +147,17 @@ def scanner(request):
             for chunk in image_file.chunks():
                 destination.write(chunk)
 
+        # Assuming BarcodeReader is a function that reads barcode data
         barcodedata = BarcodeReader(file_path)
 
-        check_and_save_string(barcodedata, "JKMapp/static/paytm.csv")
-        #print(barcodedata)
-        
-        #return HttpResponse('Image uploaded successfully.')
+        # Assuming check_and_save_string saves barcode data to a CSV file
+        ans = check_and_save_string(barcodedata, "JKMapp/static/paytm.csv")
+
+        # Redirect to scanner.html and pass data
+        return render(request, 'scanner.html', {'ans': ans})
     else:
         print("did not get any image")
-    return render(request, 'scanner.html')
+        return render(request, 'scanner.html')  # Render the same page
 
 
 
