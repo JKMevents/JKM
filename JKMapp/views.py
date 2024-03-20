@@ -130,41 +130,4 @@ def upload_image(request):
 #from django.shortcuts import render, redirect
 #from .barcode_utils import BarcodeReader  # Assuming barcode reader function is in barcode_utils module
 
-def scanner(request):
-    if request.method == 'POST' and request.FILES.get('image'):
-        image_file = request.FILES['image']
-        # Define the directory where you want to save the uploaded images
-        upload_dir = 'JKMapp/static/images/'
-        # Ensure the upload directory exists
-        if not os.path.exists(upload_dir):
-            os.makedirs(upload_dir)
-
-        # Construct the file path to save the uploaded image
-        file_path = os.path.join(upload_dir, image_file.name)
-
-        # Save the uploaded image to the file path
-        with open(file_path, 'wb') as destination:
-            for chunk in image_file.chunks():
-                destination.write(chunk)
-
-        # Assuming BarcodeReader is a function that reads barcode data
-        barcodedata = BarcodeReader(file_path)
-
-        # Assuming check_and_save_string saves barcode data to a CSV file
-        ans = check_and_save_string(barcodedata, "JKMapp/static/paytm.csv")
-
-        # Redirect to scanner.html and pass data
-        return render(request, 'scanner.html', {'ans': ans})
-    else:
-        print("did not get any image")
-        return render(request, 'scanner.html')  # Render the same page
-
-
-
-
-
-
-
-
-
 
