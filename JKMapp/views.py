@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .utils import create_tickets, read_counters, update_counters, generate_pdf_from_excel, BarcodeReader, check_and_save_string
+from .utils import create_tickets, read_counters, update_counters, generate_pdf_from_excel #BarcodeReader, check_and_save_string
 import os
 from django.views.decorators.csrf import csrf_protect
 from PIL import Image

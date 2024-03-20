@@ -12,8 +12,8 @@ from reportlab.pdfgen import canvas
 
 import os.path
 
-import cv2
-from pyzbar.pyzbar import decode
+#import cv2
+#from pyzbar.pyzbar import decode
 
 
 COUNTERS_FILE_PATH = 'JKMapp/static/counter_info.xlsx'
@@ -273,47 +273,6 @@ def generate_pdf_from_excel(input_excel, output_pdf):
 
 
 
-
-def BarcodeReader(image_path):
-    # Read the image
-    img = cv2.imread(image_path)
-      
-    # Decode the barcode image
-    detectedBarcodes = decode(img)
-      
-    # If not detected then print the message
-    if not detectedBarcodes:
-        print("QR Code Not Detected or your QR code is blank/corrupted!")
-    else:
-        # Traverse through all the detected barcodes in the image
-        for barcode in detectedBarcodes:
-            # Print the barcode data
-            print("QR Code Data:", barcode.data)
-        return barcode.data
-    
-
-import csv
-
-def check_and_save_string(input_string, file_path):
-    # Read existing strings from the CSV file
-    existing_strings = set()
-    try:
-        with open(file_path, 'r') as file:
-            reader = csv.reader(file)
-            for row in reader:
-                existing_strings.add(row[0])  # Assuming each row contains a single string
-    except FileNotFoundError:
-        pass  # File not found, assume no existing strings
-
-    # Check if input_string already exists
-    if input_string.decode('utf-8') in existing_strings:
-        return "String is repeated"
-    else:
-        # Save the string to the CSV file
-        with open(file_path, 'a', newline='') as file:
-            writer = csv.writer(file)
-            writer.writerow([input_string.decode('utf-8')])
-        return "String saved successfully"
 
 # Example usage:
 #input_string = b'JKM2024_1'
